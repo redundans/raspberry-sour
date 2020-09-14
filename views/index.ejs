@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/static/fontawesome/css/all.css' />
+    <!-- development version, includes helpful console warnings -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body class="bg-raspberry text-dark text-xl my-10 mx-10">
+	<div class="container mx-auto">
+		<div class="flex flex-col">
+			<div id="logo">
+				<img class="h-32 w-auto mx-auto" alt="A raspberry sour logo" src="/images/raspberry-sour-logo.png">
+			</div>
+			<div id="app">
+				<div class="my-10">
+					<p>Hello and welcome to <strong class="font-bold">Raspberry Sour</strong>, a small web application used to control the <a href="#" class="underline hover:no-underline">DYI Arduino Fermenting Cooler</a>.</p>
+					<p>Here you will be able to start timed cycles that sets different tempratures throughout the fermentation process. While the fermentation is ongoing you are able to follow the active fermentation in the temperature log below.</p>
+				</div>
+  				<div class="my-10 bg-white shadow-xl p-5 py-3 rounded-lg">
+  					<h1 class="text-xl font-bold">Active fermentation:</h1>
+  					<div class="my-5 text-base">
+  						<p>The temperature in the cooler is now <strong class="font-bold"><%- temp %>°</strong> celcius.</p>
+  					</div>
+  					<h3 class="text-base font-bold mt-10 my-5">Logged temperatures:</h3>
+  					<ul class="text-base border-b mb-5">
+  						<li v-for="log in sorted(logs)" class="flex justify-between py-3 border-t">
+  							<span>{{log.datetime}}</span>
+  							<span>{{log.temp}}° celcius</span>
+  						</li>
+  						<li v-if="logs.length < 1" class="flex justify-between py-3 border-t text-gray-500">
+  							No logged temperatures yet!
+  						</li>
+  					</ul>
+  					<h3 class="text-base font-bold mt-10 my-5">Planned temperatures</h3>
+  					<ul class="text-base border-b mb-5">
+  						<li v-for="stamp in sorted(stamps)" class="flex justify-between py-3 border-t">
+  							<span>{{stamp.datetime}}</span>
+  							<span>{{stamp.temp}}° celcius</span>
+  						</li>
+  					</ul>
+  				</div>
+  				<div class="my-10 flex flex-col p-5 py-3 rounded-lg shadow-xl bg-white text-dark font-bold w-full">
+	  				<button v-on:click="showForm=!showForm" class="flex flex-row justify-between w-full focus:outline-none">
+	  					<div class="text-xl font-bold">
+							Start new fermentation!
+						</div>
+						<div>
+							<i v-if="!showForm" class="fas fa-angle-right text-xl"></i>
+							<i v-if="showForm" class="fas fa-angle-down text-xl"></i>
+						</div>
+	  				</button>
+					<form @submit="submitForm" v-if="showForm" class="mt-3 pt-5 pb-3 border-t">
+						<p class="leading-tight text-base font-normal">Fill in from wich dates the temperature should change and to what celcius. The cooler will try to regulate the temperature after the last timestamp.</p>
+						<h2 class="text-base font-bold mt-10 my-5">Timestamps:</h2>
+						<div v-if="error" class="my-5 text-raspberry text-base font-normal">{{error}}</div>
+						<ul id="timestamps" class="my-5 border-t">
+							<li v-for="(input, index) in form" class="border-b pt-1 pb-5">
+								<div class="flex flex-wrap -mx-5">
+									<div class="px-5 w-8/12">
+										<label class="leading-none p-0 text-gray-700 text-sm font-normal mb-2" for="datetime">
+											Date & Time
+										</label>
+										<input class="appearance-none border rounded h-10 w-full py-2 px-3 text-dark leading-tight focus:outline-none" name="datetime[]" v-model="input.datetime" id="datetime" type="datetime-local" placeholder="">
+									</div>
+									<div class="px-5 w-4/12">
+										<label class="leading-none p-0 text-gray-700 text-sm font-normal mb-2" for="temperature">
+											Celcius
+										</label>
+										<input class="appearance-none border rounded h-10 w-full py-2 px-3 text-dark leading-tight focus:outline-none" name="temperature[]" v-model="input.temp" id="temperature" type="number" placeholder="18">
+									</div>
+									<div class="px-5 pt-1 w-full">
+										<button v-on:click="deleteFromForm(index)" class="text-sm font-normal text-raspberry cursor-pointer">Delete</button>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="flex justify-between">
+							<button id="add-timestamp" v-on:click="addToForm" class="text-base font-bold">
+								<i class="fas fa-plus mr-3"></i>Add timestamp
+							</button>
+							<input type="submit" id="create-fermentation" class="bg-raspberry text-white rounded p-3 text-base font-bold" value="Create fermentation">
+						</div>
+					</form>
+  				</div>
+			</div>
+			<footer class="mt-10 text-sm font-bold opacity-25 text-center">
+				<a href="https://kopimi.com/" target="_blank" rel="nofollow">☭ kopimi</a>
+			</footer>
+    	</div>
+    </div>
+	<script src="/javascripts/script.js"></script>
+  </body>
+</html>

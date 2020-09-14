@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+p:not(:first-child) {
+	@apply my-5;
+}
+
+form.open .fa-angle-down,
+form .fa-angle-right,
+form.open #form-content {
+	@apply inline-block;
+}
+
+form.open .fa-angle-right,
+form .fa-angle-down,
+form #form-content {
+	@apply hidden;
+}
