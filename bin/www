@@ -7,6 +7,14 @@
 var app = require('../app');
 var debug = require('debug')('raspberry-sour-express:server');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
+
+// serve the API with signed certificate on 443 (SSL/HTTPS) port
+var settings = {
+  key: fs.readFileSync('/etc/letsencrypt/live/sour.klandestino.se/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/sour.klandestino.se/fullchain.pem'),
+};
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +27,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer( settings, app );
 
 /**
  * Listen on provided port, on all network interfaces.
