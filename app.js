@@ -3,26 +3,66 @@
  */
 require('custom-env').env()
 
+/**
+ * Module dependencies.
+ */
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var moment = require('moment'); 
 var fs = require('fs');
 
-const SerialPort = require('serialport')
-const Readline = require('@serialport/parser-readline')
-const port = new SerialPort(process.env.SERIAL_PORT, {
+/**
+ * Setup Serial Port.
+ */
+if ( process.env.SERIAL_PORT !=== "" ) {
+var SerialPort = require('serialport');
+var Readline = require('@serialport/parser-readline');
+var port = new SerialPort(process.env.SERIAL_PORT, {
     baudRate: 9600
-})
-const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+});
+var parser = port.pipe(new Readline({ delimiter: '\r\n' }));
 
+/**
+ * Read the serialPort data from Arduino.
+ */
+parser.on('data', (data) => {
+	app.locals = {
+	    temp: data,
+	};
+	// Read logs file
+	fs.readFile('static/logs.json', 'utf-8', (err, data) => {
+	    if (err) {
+	        res.json( {"error": "No log file found."} );
+	    }
+	    // Parse JSON object
+	    const logs = JSON.parse(data.toString());
+	    // Add temp as entry i logs
+		logs.push({ datetime: moment().format(), temp: app.locals.temp } )
+		// Write logs to file§
+		try {
+		    fs.writeFileSync('static/logs.json', JSON.stringify(logs));
+		} catch (error) {
+		    console.error(error);
+		}
+	});
+});
+}
+
+/**
+ * Setup Routes.
+ */
 var indexRouter = require('./routes/index');
 var logsRouter = require('./routes/logs');
 var stampsRouter = require('./routes/stamps');
 var tempRouter = require('./routes/temp');
+var brewfatherRouter = require('./routes/brewfather');
 
+/**
+ * Start ExpressJS.
+ */
 var app = express();
 
 // view engine setup
@@ -40,6 +80,7 @@ app.use('/static', express.static('./static'));
 app.use('/logs', logsRouter);
 app.use('/stamps', stampsRouter);
 app.use('/temp', tempRouter);
+app.use('/brewfather', brewfatherRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,30 +97,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-// Read the serialPort data from Arduino
-parser.on('data', (data) => {
-	app.locals = {
-	    temp: data,
-	};
-	// Read logs file
-	fs.readFile('static/logs.json', 'utf-8', (err, data) => {
-	    if (err) {
-	        res.json( {"error": "No log file found."} );
-	    }
-	    // Parse JSON object
-	    const logs = JSON.parse(data.toString());
-	    // Add temp as entry i logs
-		logs.push({ datetime: new Date(), temp: app.locals.temp } )
-		// Write logs to file§
-		try {
-		    fs.writeFileSync('static/logs.json', JSON.stringify(logs));
-		} catch (error) {
-		    console.error(error);
-		}
-	});
-});
-
 
 module.exports = app;

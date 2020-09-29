@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-
 var app = require('../app');
 var debug = require('debug')('raspberry-sour-express:server');
 var http = require('http');
@@ -16,30 +15,35 @@ var fs = require('fs');
 require('custom-env').env()
 
 /**
- * Set up signed certificate on 443 (SSL/HTTPS) port.
- */
-var settings = {
-  key: fs.readFileSync(process.env.CERT_KEY),
-  cert: fs.readFileSync(process.env.CERT_CHAIN),
-};
-
-/**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+if(process.env.CERT_KEY !== "" && process.env.CERT_CHAIN !== "") {
 
-var server = https.createServer( settings, app );
+  /**
+   * Set up signed certificate on 443 (SSL/HTTPS) port.
+   */
+  var settings = {
+    key: fs.readFileSync(process.env.CERT_KEY),
+    cert: fs.readFileSync(process.env.CERT_CHAIN),
+  };
+
+  /**
+   * Create HTTPS server.
+   */
+  var server = https.createServer(settings, app);
+} else {
+  /**
+   * Create HTTP server.
+   */
+  var server = http.createServer(settings, app);
+}
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
@@ -47,7 +51,6 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
@@ -67,7 +70,6 @@ function normalizePort(val) {
 /**
  * Event listener for HTTP server "error" event.
  */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -95,7 +97,6 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
