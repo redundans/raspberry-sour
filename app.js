@@ -1,3 +1,8 @@
+/**
+ * Load .env file.
+ */
+require('custom-env').env()
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -8,7 +13,7 @@ var fs = require('fs');
 
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
-const port = new SerialPort('/dev/cu.usbmodem14101', {
+const port = new SerialPort(process.env.SERIAL_PORT, {
     baudRate: 9600
 })
 const parser = port.pipe(new Readline({ delimiter: '\r\n' }))

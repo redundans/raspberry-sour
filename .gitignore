@@ -9,3 +9,6 @@ node_modules/
 
 # Other
 .DS_Store
+
+# .env files
+.env
