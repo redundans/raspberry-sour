@@ -4,11 +4,11 @@ var low = require('lowdb');
 var FileSync = require('lowdb/adapters/FileSync');
 var fs = require('fs');
 
-/* GET logs listing. */
+/* GET recipes listing. */
 router.get('/', function(req, res, next) {
 	var adapter = new FileSync('db.json');
 	var db = low(adapter);
-	var response = db.get('logs').sortBy('datetime').value();
+	var response = db.get('recipes').value();
 	res.json(response);
 });
 

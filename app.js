@@ -12,43 +12,40 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var moment = require('moment'); 
+var low = require('lowdb');
+var FileSync = require('lowdb/adapters/FileSync');
 var fs = require('fs');
+
+var adapter = new FileSync('db.json');
+var db = low(adapter);
+// Set some defaults (required if your JSON file is empty)
+db.defaults({ recipes: [], logs: {} }).write();
 
 /**
  * Setup Serial Port.
  */
-if ( process.env.SERIAL_PORT !=== "" ) {
-var SerialPort = require('serialport');
-var Readline = require('@serialport/parser-readline');
-var port = new SerialPort(process.env.SERIAL_PORT, {
-    baudRate: 9600
-});
-var parser = port.pipe(new Readline({ delimiter: '\r\n' }));
-
-/**
- * Read the serialPort data from Arduino.
- */
-parser.on('data', (data) => {
-	app.locals = {
-	    temp: data,
-	};
-	// Read logs file
-	fs.readFile('static/logs.json', 'utf-8', (err, data) => {
-	    if (err) {
-	        res.json( {"error": "No log file found."} );
-	    }
-	    // Parse JSON object
-	    const logs = JSON.parse(data.toString());
-	    // Add temp as entry i logs
-		logs.push({ datetime: moment().format(), temp: app.locals.temp } )
-		// Write logs to file§
-		try {
-		    fs.writeFileSync('static/logs.json', JSON.stringify(logs));
-		} catch (error) {
-		    console.error(error);
-		}
+if ( process.env.SERIAL_PORT !== "" ) {
+	var SerialPort = require('serialport');
+	var Readline = require('@serialport/parser-readline');
+	var port = new SerialPort(process.env.SERIAL_PORT, {
+    	baudRate: 9600
 	});
-});
+	var parser = port.pipe(new Readline({ delimiter: '\r\n' }));
+
+	/**
+	 * Read the serialPort data from Arduino.
+	 */
+	parser.on('data', (data) => {
+		app.locals = {
+			temp: data,
+		};
+		// Reload db for each line
+		var adapter = new FileSync('db.json');
+		var db = low(adapter);
+
+		// Write temp to log
+		db.get('logs').push({ datetime: moment().format(), temp: app.locals.temp }).write();
+	});
 }
 
 /**
@@ -56,9 +53,9 @@ parser.on('data', (data) => {
  */
 var indexRouter = require('./routes/index');
 var logsRouter = require('./routes/logs');
-var stampsRouter = require('./routes/stamps');
-var tempRouter = require('./routes/temp');
+var recipesRouter = require('./routes/recipes');
 var brewfatherRouter = require('./routes/brewfather');
+var tempRouter = require('./routes/temp');
 
 /**
  * Start ExpressJS.
@@ -78,9 +75,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/static', express.static('./static'));
 app.use('/logs', logsRouter);
-app.use('/stamps', stampsRouter);
-app.use('/temp', tempRouter);
+app.use('/recipes', recipesRouter);
 app.use('/brewfather', brewfatherRouter);
+app.use('/temp', tempRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

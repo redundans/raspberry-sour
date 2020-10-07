@@ -21,7 +21,6 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 if(process.env.CERT_KEY !== "" && process.env.CERT_CHAIN !== "") {
-
   /**
    * Set up signed certificate on 443 (SSL/HTTPS) port.
    */
