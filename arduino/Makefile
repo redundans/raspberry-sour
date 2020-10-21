@@ -5,4 +5,4 @@ BOARD_TAG = uno
 
 include /usr/share/arduino/Arduino.mk
 
-## avrdude -q -V -p atmega328p -D -c arduino -b 115200 -P /dev/ttyACM0 -U flash:w:build-uno/sketchbook.hex:i
+## avrdude -q -V -p atmega328p -D -c arduino -b 115200 -P /dev/ttyACM0 -U flash:w:build-uno/arduino.hex:i

@@ -1,6 +1,18 @@
 {
   "recipes": [
+    {
+      "id": "0yKQTO4bOKCnM5t3RJ1koXmUovDppN",
+      "datetime": "2020-10-21T16:25:57+02:00",
+      "name": "Citrus IPA Uppdaterad",
+      "steps": [
+        {
+          "stepTime": 14,
+          "type": "Primary",
+          "stepTemp": 20
+        }
+      ],
+      "activated": false
+    }
   ],
-  "logs": [
-  ]
+  "logs": []
 }
