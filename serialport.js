@@ -1,7 +1,13 @@
+/**
+ * Load .env file.
+ */
+require('custom-env').env()
+
 var SerialPort = require('serialport');
 var Readline = require('@serialport/parser-readline');
 var moment = require('moment'); 
 var low = require('lowdb');
+var FileSync = require('lowdb/adapters/FileSync');
 
 /**
  * Setup database.
