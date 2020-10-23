@@ -40,7 +40,7 @@ if ( process.env.SERIAL_PORT !== "" ) {
 		let nextMoment = moment(lastLog.datetime).add(1, 'hours');
 
 		// I one hour passed since last log entry.
-		if(moment().isAfter(nextMoment, hour) ) {
+		if(moment().isAfter(nextMoment, 'hour') ) {
 			// Write new log entry.
 			db.get('logs').push({ datetime: moment().format(), temp: app.locals.temp }).write();
 		}
