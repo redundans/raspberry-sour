@@ -38,8 +38,9 @@ if ( process.env.SERIAL_PORT !== "" ) {
                 // Get last log entry and the moment one hour after that.
                 db.read();
                 let lastLog = db.get('logs').takeRight(1).value().pop();
-                let nextMoment = typeof lastLog !== "undefined" ? moment(lastLog.datetime).add(1, 'hours') : moment().subt$
+                let nextMoment = typeof lastLog !== "undefined" ? moment(lastLog.datetime).add(1, 'hours') : moment().add(1, 'hours');
 
+                console.log( { datetime: moment().format(), temp: data } );
                 // If one hour passed since last log entry.
                 if(moment().isAfter(nextMoment, 'hour') ) {
                         // Write new log entry.
