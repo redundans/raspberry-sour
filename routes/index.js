@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Raspberry Sour', temp: req.app.locals.temp });
+  res.render('index', { title: 'Raspberry Sour' });
 });
 
 module.exports = router;

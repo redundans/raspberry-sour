@@ -11,8 +11,26 @@
           "stepTemp": 20
         }
       ],
+      "activated": "2020-10-23T10:09:12+02:00"
+    },
+    {
+      "id": "2yKQTO4bOKCnM5t3RJ1koXmUovDppN",
+      "datetime": "2020-10-21T16:25:57+02:00",
+      "name": "En suröl",
+      "steps": [
+        {
+          "stepTime": 14,
+          "type": "Primary",
+          "stepTemp": 20
+        }
+      ],
       "activated": false
     }
   ],
-  "logs": []
+  "logs": [
+    {
+      "datetime": "2020-10-23T08:48:57+02:00",
+      "temp": "22.44"
+    }
+  ]
 }
