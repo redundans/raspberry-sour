@@ -60,12 +60,13 @@ if ( process.env.SERIAL_PORT !== "" ) {
         port.write(setTemp+'\r\n')
 
         let lastLog = db.get('logs').takeRight(1).value().pop();
-        let nextMoment = typeof lastLog !== "undefined" ? moment(lastLog.datetime).add(1, 'hours') : moment().add(1, 'hours');
+        let nextMoment = typeof lastLog !== "undefined" ? moment(lastLog.datetime).add(15, 'minutes') : moment().subtract(15, 'minutes');
 
         // If one hour passed since last log entry.
-        if(moment().isAfter(nextMoment, 'hour') ) {
+        if(moment().isAfter(nextMoment, 'minute') ) {
                 // Write new log entry.
                 db.get('logs').push({ datetime: moment().format(), temp: data }).write();
         }
     });
 }
+
