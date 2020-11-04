@@ -27,7 +27,7 @@ var app = new Vue({
 	},
 	filters: {
 		moment: function (date) {
-			return moment(date).format('D MMMM – h:mm');
+			return moment(date).format('D MMMM – hh:mm');
 		}
 	}
 })

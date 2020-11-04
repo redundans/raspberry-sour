@@ -8,7 +8,7 @@ var fs = require('fs');
 router.get('/', function(req, res, next) {
 	var adapter = new FileSync('db.json');
 	var db = low(adapter);
-	var response = db.get('logs').sortBy('datetime').value();
+	var response = db.get('logs').sortBy('datetime').value().reverse();
 	res.json(response);
 });
 
