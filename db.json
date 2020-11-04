@@ -2,16 +2,21 @@
   "recipes": [
     {
       "id": "0yKQTO4bOKCnM5t3RJ1koXmUovDppN",
-      "datetime": "2020-10-21T16:25:57+02:00",
+      "datetime": "2020-10-04T16:25:57+02:00",
       "name": "Citrus IPA Uppdaterad",
       "steps": [
         {
-          "stepTime": 14,
+          "stepTime": 9,
           "type": "Primary",
-          "stepTemp": 20
+          "stepTemp": 18
+        },
+        {
+          "stepTime": 5,
+          "type": "Primary",
+          "stepTemp": 21
         }
       ],
-      "activated": "2020-11-02T18:50:27+01:00"
+      "activated": "2020-11-04T18:50:27+01:00"
     },
     {
       "id": "2yKQTO4bOKCnM5t3RJ1koXmUovDppN",
@@ -31,6 +36,14 @@
     {
       "datetime": "2020-10-23T08:48:57+02:00",
       "temp": "22.44"
+    },
+    {
+      "datetime": "2020-11-02T21:01:11+01:00",
+      "temp": "-127.00"
+    },
+    {
+      "datetime": "2020-11-04T16:45:26+01:00",
+      "temp": "-127.00"
     }
   ]
 }
