@@ -21,6 +21,7 @@ var fs = require('fs');
 var indexRouter = require('./routes/index');
 var logsRouter = require('./routes/logs');
 var recipesRouter = require('./routes/recipes');
+var tempRouter = require('./routes/temp');
 var brewfatherRouter = require('./routes/brewfather');
 
 /**
@@ -41,6 +42,7 @@ app.use('/', indexRouter);
 app.use('/static', express.static('./static'));
 app.use('/logs', logsRouter);
 app.use('/recipes', recipesRouter);
+app.use('/temp', tempRouter);
 app.use('/brewfather', brewfatherRouter);
 
 // catch 404 and forward to error handler

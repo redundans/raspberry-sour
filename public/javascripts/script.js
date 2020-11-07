@@ -4,11 +4,12 @@ var app = new Vue({
 		message: 'Hello Vue!',
 		logs: [],
 		recipes: [],
+		temp: 0,
 		form: [
-		{
-			"datetime": "",
-			"temp": ""
-		}
+			{
+				"datetime": "",
+				"temp": ""
+			},
 		],
 		error: false,
 		showForm: false,
@@ -18,6 +19,8 @@ var app = new Vue({
 			.then(response => {this.logs = response.data});
 		axios.get("/recipes")
 			.then(response => {this.recipes = response.data });
+		axios.get("/temp")
+			.then(response => {this.temp = response.data });
 	},
 	methods: {
 		setActivatedRecipe: function (id) {
