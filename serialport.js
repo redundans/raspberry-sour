@@ -18,7 +18,7 @@ var db = low(adapter);
 /**
  * Set some defaults (required if your JSON file is empty).
  */
-db.defaults({ recipes: [], logs: [] }).write();
+db.defaults({ recipes: [], logs: [], temp: 0 }).write();
 
 /**
  * Setup Serial Port.
@@ -67,6 +67,7 @@ if ( process.env.SERIAL_PORT !== "" ) {
                 // Write new log entry.
                 db.get('logs').push({ datetime: moment().format(), temp: data }).write();
         }
+        db.set('temp', data).write();
     });
 }
 
